@@ -1,0 +1,28 @@
+{
+  "name": "planet",
+  "version": "0.1.0",
+  "description": "Planet generator",
+  "main": ".#generator.js",
+  "dependencies": {
+    "feedparser": "^1.1.4",
+    "iconv": "^2.1.11",
+    "request": "^2.67.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/asdofindia/planet.git"
+  },
+  "keywords": [
+    "planet"
+  ],
+  "author": "Akshay S Dinesh <asdofindia@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/asdofindia/planet/issues"
+  },
+  "homepage": "https://github.com/asdofindia/planet#readme"
+}
