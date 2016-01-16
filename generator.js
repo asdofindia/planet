@@ -7,9 +7,17 @@ var request = require('request')
   , Iconv = require('iconv').Iconv
   , zlib = require('zlib');
 
+var RSS = require('rss');
+
 var posts = new Array;
 var feedsFetched = 0;
 var totalFeeds;
+var feedList = new Array;
+var RSSfeed = new RSS({
+  title: "Planet",
+  description: "One planet!",
+  feed_url: "index.xml"
+});
 
 function fetch(feed) {
   // Define our streams
@@ -85,13 +93,13 @@ function getParams(str) {
 function done(err) {
   if (err) {
     console.log(err, err.stack);
-    feedsFetched+=1;
+    feedsFetched += 1;
     if(feedsFetched == totalFeeds){
     	complete();
     }
     return;
   }
-  feedsFetched+=1;
+  feedsFetched += 1;
   if (feedsFetched == totalFeeds){
     complete();
   }
@@ -99,33 +107,100 @@ function done(err) {
 }
 
 function complete(){
-  var htmldata = '<html><body>';
-    console.log("completed");
-  posts = posts.sort(function(a,b){
+  console.log('finished fetching feeds');
+  var htmldata = ''
+      + htmlHeader()
+      + '<div class="entries">';
+  posts = posts.sort(function(a,b) {
     	return new Date(b.date) - new Date(a.date);
+  });
+  posts = posts.slice(0,20);
+  posts.forEach(function(post) {
+    htmldata += htmlPosts(post);
+    RSSfeed.item({
+      title: post.title,
+      description: post.description,
+      url: post.url,
+      guid: post.guid,
+      author: post.author,
+      date: post.date
     });
-    posts.forEach(function(post){
-      htmldata+=util.format('<div><a href="%s"><h2>%s</h2></a> posted on %s</div>', post.link, post.title, post.date);
-    });
-htmldata+='</body></html>';
+  });
+  htmldata = htmldata
+    + '</div> <!-- close entries -->'
+    + htmlSidebar()
+    + htmlFooter();
   fs.writeFileSync('index.html', htmldata);
+  fs.writeFileSync('index.xml', RSSfeed.xml({indent: true}));
   process.exit();
 }
 
+function htmlHeader(){
+  var htmlheader = ''
+      + '<!doctype html>'
+      + '<html>'
+      + '<head>'
+      + '<title>Planet</title>'
+      + '<link href="style.css" rel="stylesheet" />'
+      + '</head>'
+      + '<body>'
+      + '<h1 class="planetHeader">Planet</h1>';
+  return htmlheader;
+}
+
+function htmlPosts(post) {
+  var posthtml = '';
+  posthtml = posthtml
+    + util.format('<div class="entry">')
+    + util.format('<div class="entryTitle"><a href="%s"><h2>%s</h2></a></div>', post.link, post.title);
+  if (post.author != null) {
+    posthtml = posthtml
+      + util.format('<div class="entryMeta">posted on %s by %s</div>', post.date, post.author)
+  } else {
+    posthtml = posthtml
+      + util.format('<div class="entryMeta">posted on %s</div>', post.date);
+  }
+  posthtml = posthtml
+    + util.format('<div class="entryDescription">%s</div>', post.description)
+    + util.format('</div>');
+  return posthtml;
+}
+
+function htmlSidebar(){
+  var sidebarhtml = ''
+      + 'Subscribe to planet: <a href="index.xml">RSS</a>'
+      + '<div class="sidebar">Links:<br/>';
+  feedList.forEach(function(feed) {
+    sidebarhtml = sidebarhtml
+      + util.format('<a href="%s">%s</a><br/>', feed.url, feed.title);
+  });
+  sidebarhtml += '</div>';
+  return sidebarhtml;
+}
+
+function htmlFooter(){
+  var htmlfooter = ''
+      + '</body>'
+      + '</html>';
+  return htmlfooter;
+}
+
 function readlist(list){
-  var feedList = new Array;
   var lineReader = readline.createInterface({
     input: fs.createReadStream(list)
   });
 
   lineReader.on('line', function(line){
-    feedList.push(line);
+    var feed = {}
+    feed.url = line.split(' ', 1).pop();
+    feed.title = line.split(' ').slice(1).join(' ');
+    feedList.push(feed);
   });
 
   lineReader.on('close', function(){
     totalFeeds = feedList.length;
     feedList.forEach(function(feed){
-      fetch(feed)
+      fetch(feed.url)
     });
   });
 }

@@ -1,0 +1,20 @@
+.entryMeta {
+  color: #ccc;
+}
+
+.planetHeader {
+  text-align: center;
+}
+
+@media (min-width: 600px){
+  .entries {
+    width: 90%;
+    padding-left: 1%;
+    float: left;
+  }
+  .sidebar {
+    width: 8%;
+    float: right;
+    border: 1px solid black;
+  }
+}

@@ -6,7 +6,8 @@
   "dependencies": {
     "feedparser": "^1.1.4",
     "iconv": "^2.1.11",
-    "request": "^2.67.0"
+    "request": "^2.67.0",
+    "rss": "^1.2.1"
   },
   "devDependencies": {},
   "scripts": {

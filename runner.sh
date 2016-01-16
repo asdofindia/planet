@@ -3,16 +3,27 @@
 REMOTENAME="origin"
 SOURCE="master"
 PAGES="gh-pages"
-DEBUG=1
+DEBUG=0
+
+# do not configure anything below this
+
+if [[ -z "$1" ]]
+then
+  echo "dollar 1 is $1"
+  DEBUG=1
+fi
 
 REMOTEURL=$(git config --get remote.$REMOTENAME.url)
 
-echo "Updating code from $REMOTENAME"
-git pull $REMOTENAME $SOURCE
-if [ $? -ne 0 ]
+if [ $DEBUG -eq 0 ]
 then
-    echo "Please make sure you have configured REMOTENAME and other variables correctly in runner.sh"
+  echo "Updating code from $REMOTENAME"
+  git pull $REMOTENAME $SOURCE
+  if [ $? -ne 0 ]
+  then
+    echo "Please make sure you have configured REMOTENAME and other variables correctly in runner.sh. Also avoid merge conflicts."
     [ $DEBUG -ne 0 ] || exit
+  fi
 fi
 
 echo "Beginning generation"
@@ -27,7 +38,8 @@ rm -rf dist
 git init dist
 mv index.html dist/
 mv index.xml dist/
-mv index.atom dist/
+# mv index.atom dist/
+cp style.css dist/
 
 cd dist
 
@@ -40,7 +52,7 @@ if [ $DEBUG -eq 0 ]
 then
     git push $REMOTENAME $PAGES --force
 else
-    git push $REMOTENAME $PAGES --force --dry-run
+    # git push $REMOTENAME $PAGES --force --dry-run
     echo "starting server"
     http-server
 fi
