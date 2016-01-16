@@ -27,3 +27,8 @@
   clear:both;
   text-align: center;
 }
+
+/* some resets */
+pre {
+  overflow: scroll;
+}
