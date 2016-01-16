@@ -42,6 +42,7 @@ cp style.css dist/
 
 cd dist
 
+touch .nojekyll
 git remote add $REMOTENAME $REMOTEURL
 git checkout -b $PAGES
 git add --all
