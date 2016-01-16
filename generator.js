@@ -203,6 +203,10 @@ function readlist(list){
 
   lineReader.on('close', function(){
     totalFeeds = feedList.length;
+    // We can sort if we want, but it is better to sort manually
+    // feedList = feedList.sort(function(a,b) {
+    //  return a.title > b.title
+    // });
     feedList.forEach(function(feed){
       fetch(feed.url)
     });
