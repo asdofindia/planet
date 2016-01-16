@@ -14,10 +14,16 @@
   }
   .sidebar {
     width: 8%;
+    display:inline-block;
     float: right;
    }
 }
 
 .sidebarLinks {
   border: 1px solid black;
+}
+
+.footer {
+  clear:both;
+  text-align: center;
 }

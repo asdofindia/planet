@@ -140,6 +140,7 @@ function htmlHeader(){
       + '<!doctype html>'
       + '<html>'
       + '<head>'
+      + '<meta name="viewport" content="width=device-width, initial-scale=1">'
       + '<title>Planet</title>'
       + '<link href="style.css" rel="stylesheet" />'
       + '</head>'
@@ -184,6 +185,9 @@ function htmlSidebar(){
 
 function htmlFooter(){
   var htmlfooter = ''
+      + '<footer class="footer">'
+      + '<hr>That is all folks. Write some post, maybe</hr>'
+      + '</footer>'
       + '</body>'
       + '</html>';
   return htmlfooter;
