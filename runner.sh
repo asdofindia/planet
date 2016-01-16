@@ -7,9 +7,8 @@ DEBUG=0
 
 # do not configure anything below this
 
-if [[ -z "$1" ]]
+if [ "$1" = "d" ]
 then
-  echo "dollar 1 is $1"
   DEBUG=1
 fi
 
