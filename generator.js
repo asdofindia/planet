@@ -110,6 +110,7 @@ function complete(){
   console.log('finished fetching feeds');
   var htmldata = ''
       + htmlHeader()
+      + htmlSidebar()
       + '<div class="entries">';
   posts = posts.sort(function(a,b) {
     	return new Date(b.date) - new Date(a.date);
@@ -128,7 +129,6 @@ function complete(){
   });
   htmldata = htmldata
     + '</div> <!-- close entries -->'
-    + htmlSidebar()
     + htmlFooter();
   fs.writeFileSync('index.html', htmldata);
   fs.writeFileSync('index.xml', RSSfeed.xml({indent: true}));
@@ -168,13 +168,17 @@ function htmlPosts(post) {
 
 function htmlSidebar(){
   var sidebarhtml = ''
-      + 'Subscribe to planet: <a href="index.xml">RSS</a>'
-      + '<div class="sidebar">Links:<br/>';
+      + '<div class="sidebar">'
+      + 'Subscribe to planet: <a href="index.xml">RSS</a><br/>'
+      + '<a href="https://github.com/asdofindia/planet">View code</a><br/>'
+      + '<div class="sidebarLinks">Links:<br/>';
   feedList.forEach(function(feed) {
     sidebarhtml = sidebarhtml
       + util.format('<a href="%s">%s</a><br/>', feed.url, feed.title);
   });
-  sidebarhtml += '</div>';
+  sidebarhtml = sidebarhtml
+    + '</div> <!-- close sidebarLinks -->'
+    + '</div>';
   return sidebarhtml;
 }
 

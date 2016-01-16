@@ -15,6 +15,9 @@
   .sidebar {
     width: 8%;
     float: right;
-    border: 1px solid black;
-  }
+   }
+}
+
+.sidebarLinks {
+  border: 1px solid black;
 }
