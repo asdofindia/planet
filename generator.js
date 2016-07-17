@@ -113,7 +113,7 @@ function complete(){
       + htmlSidebar()
       + '<div class="entries">';
   posts = posts.sort(function(a,b) {
-    	return new Date(b.date) - new Date(a.date);
+    	return new Date(b.pubdate) - new Date(a.pubdate);
   });
   posts = posts.slice(0,20);
   posts.forEach(function(post) {
